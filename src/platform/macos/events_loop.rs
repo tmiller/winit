@@ -314,7 +314,12 @@ impl EventsLoop {
 
             appkit::NSKeyDown => {
                 let mut events = std::collections::VecDeque::new();
-                let received_c_str = foundation::NSString::UTF8String(ns_event.characters());
+
+                let received_c_str = match self.modifiers.alt_pressed {
+                    true => foundation::NSString::UTF8String(ns_event.charactersIgnoringModifiers()),
+                    _ => foundation::NSString::UTF8String(ns_event.characters()),
+                };
+
                 let received_str = std::ffi::CStr::from_ptr(received_c_str);
 
                 let vkey =  to_virtual_key_code(NSEvent::keyCode(ns_event));
