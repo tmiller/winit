@@ -12,6 +12,7 @@ use super::DeviceId;
 pub struct EventsLoop {
     modifiers: Modifiers,
     pub shared: Arc<Shared>,
+    pub alt_as_meta: bool,
 }
 
 // State shared between the `EventsLoop` and its registered windows.
@@ -166,6 +167,7 @@ impl EventsLoop {
         EventsLoop {
             shared: Arc::new(Shared::new()),
             modifiers: Modifiers::new(),
+            alt_as_meta: false,
         }
     }
 

@@ -4,6 +4,18 @@ use std::convert::From;
 use std::os::raw::c_void;
 use cocoa::appkit::NSApplicationActivationPolicy;
 use {MonitorId, Window, WindowBuilder};
+use platform::EventsLoop;
+
+/// Additional methods on `EventsLoop` that are specific to Linux.
+pub trait EventsLoopExt {
+    fn set_alt_as_meta(&mut self, bool);
+}
+
+impl EventsLoopExt for EventsLoop {
+    fn set_alt_as_meta(&mut self, value: bool) {
+        self.alt_as_meta = value;
+    }
+}
 
 /// Additional methods on `Window` that are specific to MacOS.
 pub trait WindowExt {
