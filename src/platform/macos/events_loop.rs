@@ -111,6 +111,13 @@ impl Modifiers {
             alt_pressed: false,
         }
     }
+
+    pub fn only_alt_pressed(&self) -> bool {
+        self.alt_pressed &&
+            !self.ctrl_pressed &&
+            !self.win_pressed &&
+            !self.shift_pressed
+    }
 }
 
 
@@ -315,7 +322,7 @@ impl EventsLoop {
             appkit::NSKeyDown => {
                 let mut events = std::collections::VecDeque::new();
 
-                let received_c_str = match self.modifiers.alt_pressed {
+                let received_c_str = match self.modifiers.only_alt_pressed() {
                     true => foundation::NSString::UTF8String(ns_event.charactersIgnoringModifiers()),
                     _ => foundation::NSString::UTF8String(ns_event.characters()),
                 };
