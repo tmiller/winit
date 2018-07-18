@@ -354,6 +354,7 @@ extern fn key_down(this: &Object, _sel: Sel, event: id) {
         let virtual_keycode = to_virtual_key_code(keycode);
         let scancode = keycode as u32;
         let is_repeat = msg_send![event, isARepeat];
+        let modifiers = event_mods(event);
 
         let window_event = Event::WindowEvent {
             window_id,
@@ -363,13 +364,21 @@ extern fn key_down(this: &Object, _sel: Sel, event: id) {
                     state: ElementState::Pressed,
                     scancode,
                     virtual_keycode,
-                    modifiers: event_mods(event),
+                    modifiers: modifiers,
                 },
             },
         };
 
         state.raw_characters = {
-            let characters: id = msg_send![event, characters];
+            let characters: id = if modifiers.alt &&
+                !modifiers.shift &&
+                !modifiers.logo &&
+                !modifiers.ctrl {
+                    msg_send![event, charactersIgnoringModifiers]
+                } else {
+                    msg_send![event, characters]
+                };
+
             let slice = slice::from_raw_parts(
                 characters.UTF8String() as *const c_uchar,
                 characters.len(),
