@@ -374,8 +374,10 @@ extern fn key_down(this: &Object, _sel: Sel, event: id) {
                 !modifiers.shift &&
                 !modifiers.logo &&
                 !modifiers.ctrl {
+                    println!("charactersIgnoringModifiers");
                     msg_send![event, charactersIgnoringModifiers]
                 } else {
+                    println!("characters");
                     msg_send![event, characters]
                 };
 
