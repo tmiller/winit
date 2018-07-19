@@ -369,6 +369,8 @@ extern fn key_down(this: &Object, _sel: Sel, event: id) {
             },
         };
 
+        println!("{:?}", window_event);
+
         state.raw_characters = {
             let characters: id = if modifiers.alt &&
                 !modifiers.shift &&
@@ -401,6 +403,7 @@ extern fn key_down(this: &Object, _sel: Sel, event: id) {
                         window_id,
                         event: WindowEvent::ReceivedCharacter(character),
                     };
+                    println!("{:?}", window_event);
                     shared.pending_events
                         .lock()
                         .unwrap()
